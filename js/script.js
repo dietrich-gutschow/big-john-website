@@ -4,7 +4,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const themeToggle = document.getElementById("themeToggle");
 
     function loadPage(page) {
-        content.style.opacity = 0;
+        const inner = document.getElementById("page-inner");
+
+        // Smooth fade out
+        inner.style.opacity = 0;
 
         fetch(`pages/${page}.html`)
             .then(res => {
@@ -13,8 +16,8 @@ document.addEventListener("DOMContentLoaded", () => {
             })
             .then(html => {
                 setTimeout(() => {
-                    content.innerHTML = html;
-                    content.style.opacity = 1;
+                    inner.innerHTML = html;
+                    inner.style.opacity = 1;
 
                     links.forEach(link => {
                         link.classList.remove("active");
@@ -27,10 +30,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 }, 200);
             })
             .catch(err => {
-                content.innerHTML = `<p>Error loading page: ${err.message}</p>`;
-                content.style.opacity = 1;
+                inner.innerHTML = `<p>Error loading page: ${err.message}</p>`;
+                inner.style.opacity = 1;
             });
     }
+
 
     links.forEach(link => {
         link.addEventListener("click", e => {
