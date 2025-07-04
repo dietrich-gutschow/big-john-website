@@ -1,0 +1,61 @@
+:root {
+  --bg: #fff;
+  --text: #111;
+  --accent: #ff4d4d;
+  --card: #f0f0f0;
+}
+
+[data-theme="dark"] {
+  --bg: #111;
+  --text: #fff;
+  --accent: #00ffcc;
+  --card: #222;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+  transition: background 0.4s, color 0.4s;
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+  background: var(--card);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+nav ul {
+  display: flex;
+  gap: 1rem;
+  list-style: none;
+}
+
+nav a {
+  text-decoration: none;
+  color: var(--text);
+  font-weight: bold;
+  transition: color 0.2s;
+}
+
+nav a:hover {
+  color: var(--accent);
+  transform: scale(1.05);
+}
+
+#themeToggle {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+main {
+  padding: 2rem;
+  min-height: 80vh;
+  opacity: 1;
+  transition: opacity 0.4s ease;
+}
