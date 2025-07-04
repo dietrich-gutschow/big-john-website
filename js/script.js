@@ -16,14 +16,15 @@ document.addEventListener("DOMContentLoaded", () => {
           content.innerHTML = html;
           content.style.opacity = 1;
 
-          // Highlight nav link
           links.forEach(link => {
             link.classList.remove("active");
             if (link.dataset.page === page) {
               link.classList.add("active");
             }
           });
-        }, 300);
+
+          observeScrollElements();
+        }, 200);
       })
       .catch(err => {
         content.innerHTML = `<p>Error loading page: ${err.message}</p>`;
@@ -34,8 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
   links.forEach(link => {
     link.addEventListener("click", e => {
       e.preventDefault();
-      const page = link.dataset.page;
-      loadPage(page);
+      loadPage(link.dataset.page);
     });
   });
 
@@ -47,6 +47,36 @@ document.addEventListener("DOMContentLoaded", () => {
     themeToggle.textContent = newTheme === "dark" ? "🌙" : "🌞";
   });
 
-  // Load home page on start
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, {
+    threshold: 0.1
+  });
+
+  function observeScrollElements() {
+    const elements = document.querySelectorAll('.scroll-fade');
+    elements.forEach(el => observer.observe(el));
+  }
+
+  function spawnNoodles() {
+    const container = document.querySelector('.noodle-container');
+    setInterval(() => {
+      const noodle = document.createElement('div');
+      noodle.className = 'noodle';
+      noodle.textContent = '🍜';
+      noodle.style.left = Math.random() * 100 + 'vw';
+      noodle.style.animationDuration = (5 + Math.random() * 5) + 's';
+      noodle.style.fontSize = (1 + Math.random() * 2) + 'rem';
+      container.appendChild(noodle);
+
+      setTimeout(() => noodle.remove(), 10000);
+    }, 400);
+  }
+
+  spawnNoodles();
   loadPage("home");
 });
