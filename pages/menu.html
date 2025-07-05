@@ -1,46 +1,37 @@
 <section class="menu scroll-fade">
-  <h1 class="menu-title">Foods that I offer</h1>
+  <h1 class="menu-title">Foods That We Offer</h1>
   <div class="menu-grid">
     <div class="menu-item">
-      <img src="oil-bucket.jpg" alt="Grease Bucket Special">
       <h2>Grease Bucket Special</h2>
       <p>A literal bucket of warm fryer oil with floating mystery meats. Comes with a straw.</p>
       <span class="price">£12.99</span>
+      <button class="add-to-cart" data-name="Grease Bucket Special" data-price="12.99">Add to Cart</button>
     </div>
 
     <div class="menu-item">
-      <img src="https://via.placeholder.com/150" alt="Deep-Fried Soy Sauce">
       <h2>Deep-Fried Soy Sauce</h2>
-      <p>It's sauce... that's crunchy now. Somehow still salty enough to give you heart palpitations.</p>
+      <p>Crunchy salt. More salt. You might cry.</p>
       <span class="price">£5.49</span>
+      <button class="add-to-cart" data-name="Deep-Fried Soy Sauce" data-price="5.49">Add to Cart</button>
     </div>
 
     <div class="menu-item">
-      <img src="https://via.placeholder.com/150" alt="Soggy Spring Rolls">
       <h2>Soggy Spring Rolls</h2>
-      <p>Deep-fried last week, stored under Big John's armpit for freshness. Pairs well with regret.</p>
+      <p>Stored under Big John's armpit. Authentic.</p>
       <span class="price">£3.99</span>
+      <button class="add-to-cart" data-name="Soggy Spring Rolls" data-price="3.99">Add to Cart</button>
     </div>
+  </div>
 
-    <div class="menu-item">
-      <img src="https://via.placeholder.com/150" alt="MSG Overload Noodles">
-      <h2>MSG Overload Noodles</h2>
-      <p>More MSG than noodle. May cause spontaneous flavor seizures. No refunds.</p>
-      <span class="price">£7.66</span>
-    </div>
+  <!-- Floating Cart Button -->
+  <button id="cartButton" class="cart-button">🛒 Cart (<span id="cartCount">0</span>)</button>
 
-    <div class="menu-item">
-      <img src="https://via.placeholder.com/150" alt="Wonton Smoothie">
-      <h2>Wonton Smoothie</h2>
-      <p>Blended wontons with a splash of soy milk. Why chew when you can slurp?</p>
-      <span class="price">£4.44</span>
-    </div>
-
-    <div class="menu-item">
-      <img src="https://via.placeholder.com/150" alt="Expired Duck Delight">
-      <h2>Expired Duck Delight</h2>
-      <p>Technically duck, allegedly delightful. Served cold and slightly twitching.</p>
-      <span class="price">£9.99</span>
-    </div>
+  <!-- Slide-in Cart Panel -->
+  <div id="cartPanel" class="cart-panel">
+    <h2>Your Cart</h2>
+    <div id="cartItems"></div>
+    <div class="cart-total">Total: £<span id="cartTotal">0.00</span></div>
+    <button id="buyButton" class="buy-button">BUY</button>
+    <button id="closeCart" class="close-cart">✖ Close</button>
   </div>
 </section>
