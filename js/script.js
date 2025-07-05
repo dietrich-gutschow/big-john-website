@@ -75,10 +75,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const cartTotalSpan = document.getElementById("cartTotal");
     const buyButton = document.getElementById("buyButton");
 
-    if (!cartButton || !cartPanel) return;
+    if (!cartButton || !cartPanel || !closeCartBtn) return;
 
-    cartButton.addEventListener("click", () => cartPanel.classList.add("open"));
-    closeCartBtn?.addEventListener("click", () => cartPanel.classList.remove("open"));
+    cartButton.addEventListener("click", () => {
+      cartPanel.classList.add("open");
+    });
+
+    closeCartBtn.addEventListener("click", () => {
+      cartPanel.classList.remove("open");
+    });
 
     cartItemsContainer?.addEventListener("click", (e) => {
       const idx = parseInt(e.target.dataset.index, 10);
@@ -111,6 +116,16 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   let cart = [];
+
+  function addToCart(name, price) {
+    const index = cart.findIndex(item => item.name === name);
+    if (index > -1) {
+      cart[index].qty += 1;
+    } else {
+      cart.push({ name, price: parseFloat(price), qty: 1 });
+    }
+    updateCartUI();
+  }
 
   function saveCart() {
     localStorage.setItem("bigJohnCart", JSON.stringify(cart));
