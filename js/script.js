@@ -102,11 +102,27 @@ document.addEventListener("DOMContentLoaded", () => {
                 alert("Your cart is empty!");
                 return;
             }
-            alert(`Thanks for your order! Total: £${cartTotalSpan.textContent}`);
+
+            const total = parseFloat(document.getElementById("cartTotal").textContent);
+
+            if (total >= 20 && total < 25) {
+                const confirmUpsell = confirm(
+                    "Spend £25 to get free prawn crackers!\n\nPress OK to continue with payment.\nPress Cancel to go back and add more items."
+                );
+
+                if (!confirmUpsell) {
+                    // Cancelled: let user add more items
+                    document.getElementById("cartPanel").classList.remove("open");
+                    return;
+                }
+            }
+
+            alert(`Thanks for your order! Total: £${total.toFixed(2)}`);
             cart = [];
             updateCartUI();
-            cartPanel.classList.remove("open");
+            document.getElementById("cartPanel").classList.remove("open");
         });
+
 
         document.querySelectorAll(".add-to-cart").forEach((btn) => {
             btn.addEventListener("click", () => {
@@ -142,38 +158,51 @@ document.addEventListener("DOMContentLoaded", () => {
         const cartItemsContainer = document.getElementById("cartItems");
         const cartCountSpan = document.getElementById("cartCount");
         const cartTotalSpan = document.getElementById("cartTotal");
+
         if (!cartItemsContainer) return;
 
-        cartItemsContainer.innerHTML = '';
+        // Remove free crackers if present
+        cart = cart.filter(item => item.name !== "Free Prawn Crackers");
+
         let total = 0;
         let count = 0;
 
-        if (cart.length === 0) {
-            cartItemsContainer.innerHTML = '<p>Your cart is empty.</p>';
-        } else {
-            cart.forEach((item, idx) => {
-                total += item.price * item.qty;
-                count += item.qty;
+        // First pass: calculate total
+        cart.forEach(item => {
+            total += item.price * item.qty;
+            count += item.qty;
+        });
 
-                const itemEl = document.createElement('div');
-                itemEl.className = 'cart-item';
-                itemEl.innerHTML = `
-          <div class="cart-item-name">${item.name}</div>
-          <div class="cart-item-controls">
-            <button class="qty-decrease" data-index="${idx}">−</button>
-            <div class="cart-item-qty">${item.qty}</div>
-            <button class="qty-increase" data-index="${idx}">+</button>
-            <button class="remove-item" data-index="${idx}">✖</button>
-          </div>
-        `;
-                cartItemsContainer.appendChild(itemEl);
-            });
+        // Add free crackers if total >= 25
+        if (total >= 25) {
+            cart.push({ name: "Free Prawn Crackers", price: 0, qty: 1 });
+            // Recalculate count (but not total since price = 0)
+            count += 1;
         }
+
+        // Render cart UI
+        cartItemsContainer.innerHTML = '';
+        cart.forEach((item, idx) => {
+            const itemEl = document.createElement('div');
+            itemEl.className = 'cart-item';
+            itemEl.innerHTML = `
+      <div class="cart-item-name">${item.name}</div>
+      <div class="cart-item-controls">
+        <button class="qty-decrease" data-index="${idx}">−</button>
+        <div class="cart-item-qty">${item.qty}</div>
+        <button class="qty-increase" data-index="${idx}">+</button>
+        <button class="remove-item" data-index="${idx}">✖</button>
+      </div>
+    `;
+            cartItemsContainer.appendChild(itemEl);
+        });
 
         cartCountSpan.textContent = count;
         cartTotalSpan.textContent = total.toFixed(2);
         saveCart();
     }
+
+
 
     function spawnNoodles(count = 20) {
         const container = document.querySelector(".noodle-container");
