@@ -4,37 +4,40 @@ document.addEventListener("DOMContentLoaded", () => {
     const themeToggle = document.getElementById("themeToggle");
 
     function loadPage(page) {
-        content.style.opacity = 0;
+    const content = document.getElementById("content"); // main panel
+    const pageContainer = document.getElementById("page-inner"); // just the swappable content
 
-        fetch(`pages/${page}.html`)
-            .then(res => {
-                if (!res.ok) throw new Error(`Failed to load ${page}.html`);
-                return res.text();
-            })
-            .then(html => {
-                setTimeout(() => {
-                    content.innerHTML = html;
-                    content.style.opacity = 1;
+    pageContainer.style.opacity = 0;
 
-                    links.forEach(link => {
-                        link.classList.remove("active");
-                        if (link.dataset.page === page) {
-                            link.classList.add("active");
-                        }
-                    });
+    fetch(`pages/${page}.html`)
+        .then(res => {
+            if (!res.ok) throw new Error(`Failed to load ${page}.html`);
+            return res.text();
+        })
+        .then(html => {
+            setTimeout(() => {
+                pageContainer.innerHTML = html;
+                pageContainer.style.opacity = 1;
 
-                    observeScrollElements();
-
-                    if (page === "menu") {
-                        setupCartEvents();
+                links.forEach(link => {
+                    link.classList.remove("active");
+                    if (link.dataset.page === page) {
+                        link.classList.add("active");
                     }
-                }, 200);
-            })
-            .catch(err => {
-                content.innerHTML = `<p>Error loading page: ${err.message}</p>`;
-                content.style.opacity = 1;
-            });
-    }
+                });
+
+                observeScrollElements();
+
+                if (page === "menu") {
+                    setupCartEvents();
+                }
+            }, 100); // shorter delay reduces perceived flash
+        })
+        .catch(err => {
+            pageContainer.innerHTML = `<p>Error loading page: ${err.message}</p>`;
+            pageContainer.style.opacity = 1;
+        });
+}
 
     links.forEach(link => {
         link.addEventListener("click", e => {
