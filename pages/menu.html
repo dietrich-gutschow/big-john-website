@@ -1,36 +1,60 @@
 <section class="menu scroll-fade">
-  <h1 class="menu-title">Foods That We Offer</h1>
-  <div class="menu-grid">
-    <div class="menu-item">
-      <h2>Grease Bucket Special</h2>
-      <p>A literal bucket of warm fryer oil with floating mystery meats. Comes with a straw.</p>
-      <span class="price">£12.99</span>
-      <button class="add-to-cart" data-name="Grease Bucket Special" data-price="12.99">Add to Cart</button>
-    </div>
+    <h1 class="menu-title">Big John's Authentic Chinese-ish Delights</h1>
+    <div class="menu-grid">
+        <div class="menu-item">
+            <h2>Sweet and Sour Mystery Meat</h2>
+            <p>A classic! We won't tell you what the meat is, but the sauce is 90% sugar.</p>
+            <span class="price">£6.99</span>
+            <button class="add-to-cart" data-name="Sweet and Sour Mystery Meat" data-price="6.99">Add to Cart</button>
+        </div>
 
-    <div class="menu-item">
-      <h2>Deep-Fried Soy Sauce</h2>
-      <p>Crunchy salt. More salt. You might cry.</p>
-      <span class="price">£5.49</span>
-      <button class="add-to-cart" data-name="Deep-Fried Soy Sauce" data-price="5.49">Add to Cart</button>
-    </div>
+        <div class="menu-item">
+            <h2>Egg Fried Rice (Probably)</h2>
+            <p>Fluffy-ish rice with eggy bits. May contain surprise peas.</p>
+            <span class="price">£4.25</span>
+            <button class="add-to-cart" data-name="Egg Fried Rice" data-price="4.25">Add to Cart</button>
+        </div>
 
-    <div class="menu-item">
-      <h2>Soggy Spring Rolls</h2>
-      <p>Stored under Big John's armpit. Authentic.</p>
-      <span class="price">£3.99</span>
-      <button class="add-to-cart" data-name="Soggy Spring Rolls" data-price="3.99">Add to Cart</button>
-    </div>
-  </div>
+        <div class="menu-item">
+            <h2>Big John's Beef Chow Mein</h2>
+            <p>Greasy noodles tangled with mystery-grade beef and half a carrot.</p>
+            <span class="price">£7.49</span>
+            <button class="add-to-cart" data-name="Big John's Beef Chow Mein" data-price="7.49">Add to Cart</button>
+        </div>
 
+        <div class="menu-item">
+            <h2>Peking Duck (Very Peking)</h2>
+            <p>Served shredded and crispy. Sauce? Absolutely. Authentic? Absolutely not.</p>
+            <span class="price">£8.99</span>
+            <button class="add-to-cart" data-name="Peking Duck" data-price="8.99">Add to Cart</button>
+        </div>
+
+        <div class="menu-item">
+            <h2>Kung Pao Chicken (or so we say)</h2>
+            <p>Spicy, sticky, and suspiciously crunchy. Comes with peanuts, probably.</p>
+            <span class="price">£6.75</span>
+            <button class="add-to-cart" data-name="Kung Pao Chicken" data-price="6.75">Add to Cart</button>
+        </div>
+
+        <div class="menu-item">
+            <h2>Pork</h2>
+            <p>The majority of the time this wil be properly cooked and wont give you salmonella. But we cant make
+                promises</p>
+            <span class="price">£4.30</span>
+            <button class="add-to-cart" data-name="Pork" data-price="4.30">Add to Cart</button>
+        </div>
+
+    </div>
 </section>
+
+<!-- Floating Cart Button -->
 <button id="cartButton" class="cart-button">🛒 Cart (<span id="cartCount">0</span>)</button>
 
+<!-- Slide-in Cart Panel -->
 <div id="cartPanel" class="cart-panel">
-  <h2>Your Cart</h2>
-  <div id="cartItems"></div>
-  <div class="cart-total">Total: £<span id="cartTotal">0.00</span></div>
-  <button id="buyButton" class="buy-button">BUY</button>
-  <button id="closeCart" class="close-cart">✖ Close</button>
+    <h2>Your Cart</h2>
+    <div id="cartItems"></div>
+    <div class="cart-total">Total: £<span id="cartTotal">0.00</span></div>
+    <button id="buyButton" class="buy-button">BUY</button>
+    <button id="closeCart" class="close-cart">✖ Close</button>
 </div>
-
