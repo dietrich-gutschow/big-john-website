@@ -4,40 +4,56 @@ document.addEventListener("DOMContentLoaded", () => {
     const themeToggle = document.getElementById("themeToggle");
 
     function loadPage(page) {
-    const content = document.getElementById("content"); // main panel
-    const pageContainer = document.getElementById("page-inner"); // just the swappable content
+        const content = document.getElementById("content"); // main panel
+        const pageContainer = document.getElementById("page-inner"); // just the swappable content
 
-    pageContainer.style.opacity = 0;
+        pageContainer.style.opacity = 0;
 
-    fetch(`pages/${page}.html`)
-        .then(res => {
-            if (!res.ok) throw new Error(`Failed to load ${page}.html`);
-            return res.text();
-        })
-        .then(html => {
-            setTimeout(() => {
-                pageContainer.innerHTML = html;
-                pageContainer.style.opacity = 1;
+        fetch(`pages/${page}.html`)
+            .then(res => {
+                if (!res.ok) throw new Error(`Failed to load ${page}.html`);
+                return res.text();
+            })
+            .then(html => {
+                setTimeout(() => {
+                    pageContainer.innerHTML = html;
+                    pageContainer.style.opacity = 1;
 
-                links.forEach(link => {
-                    link.classList.remove("active");
-                    if (link.dataset.page === page) {
-                        link.classList.add("active");
+                    links.forEach(link => {
+                        link.classList.remove("active");
+                        if (link.dataset.page === page) {
+                            link.classList.add("active");
+                        }
+                    });
+
+                    observeScrollElements();
+
+                    if (page === "menu") {
+                        setupCartEvents();
                     }
-                });
 
-                observeScrollElements();
+                    if (page === "bigjohntv") {
+                        const videoIDs = [
+                            "Jv2NT_A0yYo",
+                            "XX9VE85HjDM",
+                            "TRfToys9S3o",
+                            "JZ_2ig2kpWw",
+                            "OV75xgpAfl8"   // BIG JOHN'S VIDEOS
+                        ];
+                        const randomID = videoIDs[Math.floor(Math.random() * videoIDs.length)];
+                        const player = document.getElementById("johnPlayer");
+                        if (player) {
+                            player.src = `https://www.youtube.com/embed/${randomID}?autoplay=1&mute=1&rel=0`;
+                        }
+                    }
+                }, 100);
+            })
+            .catch(err => {
+                pageContainer.innerHTML = `<p>Error loading page: ${err.message}</p>`;
+                pageContainer.style.opacity = 1;
+            });
+    }
 
-                if (page === "menu") {
-                    setupCartEvents();
-                }
-            }, 100); // shorter delay reduces perceived flash
-        })
-        .catch(err => {
-            pageContainer.innerHTML = `<p>Error loading page: ${err.message}</p>`;
-            pageContainer.style.opacity = 1;
-        });
-}
 
     links.forEach(link => {
         link.addEventListener("click", e => {
