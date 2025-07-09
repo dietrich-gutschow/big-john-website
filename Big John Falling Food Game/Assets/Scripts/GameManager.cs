@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     public int misses = 0;
     public int maxMisses = 3;
     public TextMeshProUGUI healthText;
+    public TextMeshProUGUI finalScoreText;
 
     public TextMeshProUGUI scoreText;
     public GameObject gameOverPanel;
@@ -48,10 +49,17 @@ public class GameManager : MonoBehaviour
 
 
     public void GameOver()
-    {
-        Time.timeScale = 0;
-        gameOverPanel.SetActive(true);
-    }
+{
+    // Show Game Over UI
+    gameOverPanel.SetActive(true);
+    finalScoreText.text = "You Reached a Score of: " + score;
+
+    // Hide in-game UI
+    scoreText.gameObject.SetActive(false);
+    healthText.gameObject.SetActive(false);
+
+    Time.timeScale = 0f; // Pause game
+}
 
     public void RestartGame()
     {
