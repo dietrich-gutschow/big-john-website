@@ -614,7 +614,7 @@ Transform:
   m_GameObject: {fileID: 785035073}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 5, z: 0}
+  m_LocalPosition: {x: 0, y: 5.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1105,7 +1105,7 @@ MonoBehaviour:
   misses: 0
   maxMisses: 3
   healthText: {fileID: 1954071350}
-  finalScoreText: {fileID: 0}
+  finalScoreText: {fileID: 1616110957}
   scoreText: {fileID: 1583891660}
   gameOverPanel: {fileID: 1797331901}
 --- !u!4 &1871748959
