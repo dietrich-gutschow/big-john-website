@@ -3,6 +3,7 @@ using TMPro;
 using Unity.Netcode;
 using UnityEngine.SceneManagement;
 using System;
+using System.Collections;
 
 public class GameManager : NetworkBehaviour
 {
@@ -81,12 +82,28 @@ public class GameManager : NetworkBehaviour
     }
 
     public void RestartGame()
-{
-    if (!IsServer) return;
+    {
+        Time.timeScale = 1f;
 
-    Time.timeScale = 1f;
+        // If we're the host, shut down networking and disconnect all clients
+        if (NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsServer)
+        {
+            NetworkManager.Singleton.Shutdown();
 
-    // Proper network-wide scene reload
-    NetworkManager.SceneManager.LoadScene(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
-}
+            // Optional: wait a tiny delay to let disconnect happen before reloading
+            StartCoroutine(RestartScene());
+        }
+        else
+        {
+            // Client should just shut down and return to menu
+            NetworkManager.Singleton.Shutdown();
+            UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+        }
+    }
+
+    private IEnumerator RestartScene()
+    {
+        yield return new WaitForSecondsRealtime(0.2f); // small delay to ensure clean shutdown
+        UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+    }
 }
