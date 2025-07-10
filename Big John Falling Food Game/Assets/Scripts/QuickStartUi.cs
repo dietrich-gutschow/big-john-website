@@ -1,3 +1,5 @@
+// DEPRECATED: This script was used for quick UI setup in the Unity Editor. and is no longer in use
+
 using UnityEngine;
 using UnityEngine.UI;
 using Unity.Netcode;
