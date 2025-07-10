@@ -1,41 +1,42 @@
+using Unity.Netcode;
 using UnityEngine;
 
-public class FoodSpawner : MonoBehaviour
+public class FoodSpawner : NetworkBehaviour
 {
     public GameObject[] foodPrefabs;
-    public float startInterval = 0.5f;        // Starting delay between spawns
-    public float minInterval = 0.2f;          // Minimum delay (max difficulty)
-    public float difficultyRamp = 0.01f;       // How much to decrease interval per second
-
-    private float currentInterval;
+    public float spawnInterval = 1.5f;
     private float timer = 0f;
+    private bool canSpawn = false;
 
-    void Start()
+    public override void OnNetworkSpawn()
     {
-        currentInterval = startInterval;
+        // This will be called once networking is fully ready
+        if (IsServer) // works for Host too
+        {
+            canSpawn = true;
+        }
     }
 
     void Update()
     {
-        timer += Time.deltaTime;
+        if (!canSpawn) return;
 
-        // Spawn food at current interval
-        if (timer >= currentInterval)
+        timer += Time.deltaTime;
+        if (timer >= spawnInterval)
         {
             SpawnFood();
             timer = 0f;
         }
-
-        // Gradually increase difficulty
-        currentInterval -= difficultyRamp * Time.deltaTime;
-        currentInterval = Mathf.Clamp(currentInterval, minInterval, startInterval);
     }
 
     void SpawnFood()
     {
+        Debug.Log("Spawning food...");
         int index = Random.Range(0, foodPrefabs.Length);
         float x = Random.Range(-7f, 7f);
-        Vector3 spawnPos = new Vector3(x, transform.position.y, 0);
-        Instantiate(foodPrefabs[index], spawnPos, Quaternion.identity);
+        Vector3 spawnPos = new Vector3(x, 6f, 0f);
+
+        GameObject food = Instantiate(foodPrefabs[index], spawnPos, Quaternion.identity);
+        food.GetComponent<NetworkObject>().Spawn(); // ensures all clients see it
     }
 }

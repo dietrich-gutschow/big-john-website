@@ -1,23 +1,18 @@
+using Unity.Netcode;
 using UnityEngine;
 
-public class FallingFood : MonoBehaviour
+public class FallingFood : NetworkBehaviour
 {
     public bool isBad = false;
 
     void OnTriggerEnter2D(Collider2D other)
     {
+        if (!IsServer) return;
+
         if (other.CompareTag("Player"))
         {
-            if (isBad)
-            {
-                GameManager.instance.GameOver();
-            }
-            else
-            {
-                GameManager.instance.AddScore();
-            }
-
-            Destroy(gameObject);
+            GameManager.instance.AddScoreServerRpc();
+            NetworkObject.Despawn();
         }
     }
 
@@ -25,7 +20,7 @@ public class FallingFood : MonoBehaviour
     {
         if (transform.position.y < -6f)
         {
-            GameManager.instance.MissFood();
+            GameManager.instance.MissFoodServerRpc();
             Destroy(gameObject);
         }
     }

@@ -1,18 +1,21 @@
 using UnityEngine;
 using TMPro;
-using UnityEngine.SceneManagement; // Required for reloading scenes
+using Unity.Netcode;
+using UnityEngine.SceneManagement;
 
-public class GameManager : MonoBehaviour
+public class GameManager : NetworkBehaviour
 {
     public static GameManager instance;
 
-    public int score = 0;
-    public int misses = 0;
+    public NetworkVariable<int> score = new NetworkVariable<int>();
+    public NetworkVariable<int> misses = new NetworkVariable<int>();
+
     public int maxMisses = 3;
+
     public TextMeshProUGUI healthText;
     public TextMeshProUGUI finalScoreText;
-
     public TextMeshProUGUI scoreText;
+
     public GameObject gameOverPanel;
 
     private void Awake()
@@ -23,48 +26,59 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        score = 0;
-        misses = 0;
-        scoreText.text = "Score: 0";
-        healthText.text = "Health: " + (maxMisses - misses);
         gameOverPanel.SetActive(false);
-    }
+        scoreText.text = "Score: 0";
+        healthText.text = "Health: " + maxMisses;
 
-    public void AddScore()
-    {
-        score++;
-        scoreText.text = "Score: " + score;
-    }
-
-    public void MissFood()
-    {
-        misses++;
-        int remainingHealth = maxMisses - misses;
-        healthText.text = "Health: " + remainingHealth;
-
-        if (remainingHealth <= 0)
+        // Listen for network variable changes
+        score.OnValueChanged += (oldVal, newVal) =>
         {
-            GameOver();
-        }
+            scoreText.text = "Score: " + newVal;
+        };
+
+        misses.OnValueChanged += (oldVal, newVal) =>
+        {
+            int remaining = maxMisses - newVal;
+            healthText.text = "Health: " + remaining;
+            if (IsServer && remaining <= 0)
+            {
+                GameOver();
+            }
+        };
     }
 
+    [ServerRpc(RequireOwnership = false)]
+    public void AddScoreServerRpc()
+    {
+        score.Value++;
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void MissFoodServerRpc()
+    {
+        misses.Value++;
+    }
 
     public void GameOver()
-{
-    // Show Game Over UI
-    gameOverPanel.SetActive(true);
-    finalScoreText.text = "You Reached a Score of: " + score;
+    {
+        // Sync UI on all clients
+        gameOverPanel.SetActive(true);
+        finalScoreText.text = "You Reached a Score of: " + score.Value;
 
-    // Hide in-game UI
-    scoreText.gameObject.SetActive(false);
-    healthText.gameObject.SetActive(false);
+        scoreText.gameObject.SetActive(false);
+        healthText.gameObject.SetActive(false);
 
-    Time.timeScale = 0f; // Pause game
-}
+        Time.timeScale = 0f;
+    }
 
     public void RestartGame()
-{
-    Time.timeScale = 1f; // Make sure time is running
-    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); // Reloads current scene
-}
+    {
+        if (!IsServer) return;
+
+        Time.timeScale = 1;
+        NetworkManager.Singleton.SceneManager.LoadScene(
+            UnityEngine.SceneManagement.SceneManager.GetActiveScene().name,
+            LoadSceneMode.Single
+        );
+    }
 }

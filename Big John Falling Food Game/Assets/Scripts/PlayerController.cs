@@ -1,12 +1,15 @@
+using Unity.Netcode;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : NetworkBehaviour
 {
     public float speed = 5f;
     public float screenLimit = 7f;
 
     void Update()
     {
+        if (!IsOwner) return;
+
         float move = Input.GetAxis("Horizontal");
         transform.Translate(Vector2.right * move * speed * Time.deltaTime);
 
