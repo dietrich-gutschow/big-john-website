@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement; // Required for reloading scenes
 
 public class GameManager : MonoBehaviour
 {
@@ -62,8 +63,8 @@ public class GameManager : MonoBehaviour
 }
 
     public void RestartGame()
-    {
-        Time.timeScale = 1;
-        UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
-    }
+{
+    Time.timeScale = 1f; // Make sure time is running
+    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); // Reloads current scene
+}
 }
