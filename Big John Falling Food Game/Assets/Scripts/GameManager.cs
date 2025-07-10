@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine.SceneManagement;
+using System;
 
 public class GameManager : NetworkBehaviour
 {
@@ -61,24 +62,31 @@ public class GameManager : NetworkBehaviour
 
     public void GameOver()
     {
-        // Sync UI on all clients
+        if (!IsServer) return;
+
+        Time.timeScale = 0f;
+
+        // Sync game over state to all clients
+        ShowGameOverClientRpc(score.Value);
+    }
+
+    [ClientRpc]
+    void ShowGameOverClientRpc(int finalScore)
+    {
         gameOverPanel.SetActive(true);
-        finalScoreText.text = "You Reached a Score of: " + score.Value;
+        finalScoreText.text = "You Reached a Score of: " + finalScore;
 
         scoreText.gameObject.SetActive(false);
         healthText.gameObject.SetActive(false);
-
-        Time.timeScale = 0f;
     }
 
     public void RestartGame()
-    {
-        if (!IsServer) return;
+{
+    if (!IsServer) return;
 
-        Time.timeScale = 1;
-        NetworkManager.Singleton.SceneManager.LoadScene(
-            UnityEngine.SceneManagement.SceneManager.GetActiveScene().name,
-            LoadSceneMode.Single
-        );
-    }
+    Time.timeScale = 1f;
+
+    // Proper network-wide scene reload
+    NetworkManager.SceneManager.LoadScene(SceneManager.GetActiveScene().name, LoadSceneMode.Single);
+}
 }

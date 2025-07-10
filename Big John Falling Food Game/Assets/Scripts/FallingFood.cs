@@ -5,23 +5,29 @@ public class FallingFood : NetworkBehaviour
 {
     public bool isBad = false;
 
-    void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
+        // Only run on the server (host in your case)
         if (!IsServer) return;
 
         if (other.CompareTag("Player"))
         {
             GameManager.instance.AddScoreServerRpc();
-            NetworkObject.Despawn();
+
+            // Despawn this food across network
+            GetComponent<NetworkObject>().Despawn();
         }
     }
 
-    void Update()
+    private void Update()
     {
+        if (!IsServer) return;
+
+        // Auto-despawn food that falls off-screen
         if (transform.position.y < -6f)
         {
             GameManager.instance.MissFoodServerRpc();
-            Destroy(gameObject);
+            GetComponent<NetworkObject>().Despawn();
         }
     }
 }
