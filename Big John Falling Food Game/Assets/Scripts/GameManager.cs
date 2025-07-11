@@ -1,6 +1,6 @@
 using UnityEngine;
 using TMPro;
-using UnityEngine.SceneManagement; // Required for reloading scenes
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,11 +9,13 @@ public class GameManager : MonoBehaviour
     public int score = 0;
     public int misses = 0;
     public int maxMisses = 3;
+
     public TextMeshProUGUI healthText;
     public TextMeshProUGUI finalScoreText;
-
     public TextMeshProUGUI scoreText;
+
     public GameObject gameOverPanel;
+    public GameObject startMenuPanel;  // Assign your Start Menu panel here
 
     private void Awake()
     {
@@ -23,10 +25,36 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        // Pause game initially
+        Time.timeScale = 0f;
+
+        // Show start menu and hide game over panel
+        if (startMenuPanel != null)
+            startMenuPanel.SetActive(true);
+
+        gameOverPanel.SetActive(false);
+
+        ResetUI();
+    }
+
+    // Call this from your Start button's OnClick
+    public void StartGame()
+    {
+        // Hide start menu and unpause game
+        if (startMenuPanel != null)
+            startMenuPanel.SetActive(false);
+
+        Time.timeScale = 1f;
+    }
+
+    void ResetUI()
+    {
         score = 0;
         misses = 0;
         scoreText.text = "Score: 0";
         healthText.text = "Health: " + (maxMisses - misses);
+        scoreText.gameObject.SetActive(true);
+        healthText.gameObject.SetActive(true);
         gameOverPanel.SetActive(false);
     }
 
@@ -48,23 +76,20 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
     public void GameOver()
-{
-    // Show Game Over UI
-    gameOverPanel.SetActive(true);
-    finalScoreText.text = "You Reached a Score of: " + score;
+    {
+        gameOverPanel.SetActive(true);
+        finalScoreText.text = "You Reached a Score of: " + score;
 
-    // Hide in-game UI
-    scoreText.gameObject.SetActive(false);
-    healthText.gameObject.SetActive(false);
+        scoreText.gameObject.SetActive(false);
+        healthText.gameObject.SetActive(false);
 
-    Time.timeScale = 0f; // Pause game
-}
+        Time.timeScale = 0f; // Pause game
+    }
 
     public void RestartGame()
-{
-    Time.timeScale = 1f; // Make sure time is running
-    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); // Reloads current scene
-}
+    {
+        Time.timeScale = 1f; // Unpause
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
 }
