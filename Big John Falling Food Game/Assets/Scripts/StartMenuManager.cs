@@ -73,6 +73,17 @@ public class StartMenuManager : MonoBehaviour
         statusText.text = "";
     }
 
+    public void StartSinglePlayer()
+    {
+        NetworkManager.Singleton.StartHost();
+
+        // Since it's single player, immediately start the game
+        GameManager.instance.SetGameplayActive(true);
+
+        startMenuPanel.SetActive(false);
+    }
+
+
     public void BackToMainMenu()
     {
         multiplayerPanel.SetActive(false);
