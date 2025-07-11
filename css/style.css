@@ -721,17 +721,15 @@ main {
   box-shadow: 0 0 20px rgba(0,0,0,0.2);
   display: flex;
   justify-content: center;
-  overflow: hidden;
 }
 
 .game-scaler {
-  transform: scale(0.55);
+  transform: scale(0.7); /* scale down the game visually */
   transform-origin: top center;
-  width: 1280px;
-  height: 600px;
+  width: 1280px; /* Unity build width */
+  height: 600px;   /* Unity build height */
   pointer-events: auto;
 }
-
 .game-frame {
   width: 1280px;
   height: 600px;
