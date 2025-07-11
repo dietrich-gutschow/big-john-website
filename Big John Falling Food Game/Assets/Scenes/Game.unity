@@ -871,7 +871,7 @@ MonoBehaviour:
   - {fileID: 5099628284240774572, guid: a095bd0b87425554bbffa50abbb60108, type: 3}
   - {fileID: 6537625058424926452, guid: 0533d457805448a499cf4b432b8d1100, type: 3}
   - {fileID: 1384349933074867367, guid: 658b9c80997a9e64aa0655e59aba3885, type: 3}
-  startInterval: 2
+  startInterval: 3
   minInterval: 0.2
   difficultyRamp: 0.01
 --- !u!4 &785035075
