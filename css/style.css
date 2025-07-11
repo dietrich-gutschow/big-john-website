@@ -704,3 +704,34 @@ main {
   border: none;
   border-radius: 1rem;
 }
+
+.game-section {
+  text-align: center;
+  padding: 2rem;
+}
+
+.game-container {
+  margin: 2rem auto;
+  max-width: 1000px;
+  height: 600px;
+  border-radius: 1rem;
+  overflow: hidden;
+  backdrop-filter: blur(20px);
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+.game-frame {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+  background: #000; /* fallback while Unity loads */
+}
+
+/* Optional: Adjust for mobile screens */
+@media (max-width: 768px) {
+  .game-container {
+    height: 400px;
+  }
+}
