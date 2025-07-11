@@ -10,6 +10,8 @@ public class PlayerController : NetworkBehaviour
     {
         if (!IsOwner) return;
 
+        if (!GameManager.instance || !GameManager.instance.GameStarted) return;
+
         float move = Input.GetAxis("Horizontal");
         transform.Translate(Vector2.right * move * speed * Time.deltaTime);
 

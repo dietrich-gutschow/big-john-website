@@ -2,7 +2,6 @@ using UnityEngine;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine.SceneManagement;
-using System;
 using System.Collections;
 
 public class GameManager : NetworkBehaviour
@@ -20,6 +19,9 @@ public class GameManager : NetworkBehaviour
 
     public GameObject gameOverPanel;
 
+    private bool gameStarted = false;
+    public bool GameStarted => gameStarted;
+
     private void Awake()
     {
         if (instance == null) instance = this;
@@ -32,7 +34,9 @@ public class GameManager : NetworkBehaviour
         scoreText.text = "Score: 0";
         healthText.text = "Health: " + maxMisses;
 
-        // Listen for network variable changes
+        // Disable gameplay initially
+        SetGameplayActive(false);
+
         score.OnValueChanged += (oldVal, newVal) =>
         {
             scoreText.text = "Score: " + newVal;
@@ -47,6 +51,22 @@ public class GameManager : NetworkBehaviour
                 GameOver();
             }
         };
+    }
+
+    public void SetGameplayActive(bool active)
+    {
+        gameStarted = active;
+        Time.timeScale = active ? 1f : 0f;
+
+        // If you want to enable/disable player movement or spawning, do it here
+        // For example, find all player controllers and enable/disable them
+
+        foreach (var player in FindObjectsOfType<PlayerController>())
+        {
+            player.enabled = active;
+        }
+
+        // Optionally enable your food spawning or other gameplay scripts here
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -67,7 +87,6 @@ public class GameManager : NetworkBehaviour
 
         Time.timeScale = 0f;
 
-        // Sync game over state to all clients
         ShowGameOverClientRpc(score.Value);
     }
 
@@ -85,25 +104,22 @@ public class GameManager : NetworkBehaviour
     {
         Time.timeScale = 1f;
 
-        // If we're the host, shut down networking and disconnect all clients
         if (NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsServer)
         {
             NetworkManager.Singleton.Shutdown();
 
-            // Optional: wait a tiny delay to let disconnect happen before reloading
             StartCoroutine(RestartScene());
         }
         else
         {
-            // Client should just shut down and return to menu
             NetworkManager.Singleton.Shutdown();
-            UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
 
     private IEnumerator RestartScene()
     {
-        yield return new WaitForSecondsRealtime(0.2f); // small delay to ensure clean shutdown
-        UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+        yield return new WaitForSecondsRealtime(0.2f);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
